@@ -5,6 +5,8 @@ const {PORT, DATABASE_URL } = require('./config');
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
+const {userRouter} = require('./routers/routerExports');
+const {localStrategy, jwtStrategy} = require('./auth/strategies');
 const app = express();
 app.use(jsonParser);
 app.set('trust proxy', true)
@@ -18,9 +20,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-//passport.use(localStrategy);
-//passport.use(jwtStrategy);
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
+
+app.use('/api/users',userRouter);
 
 function runServer( databaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
