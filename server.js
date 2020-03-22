@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const {userRouter} = require('./routers/routerExports');
+const {studentRouter} = require('./routers/routerExports');
+const {lessonRouter} = require('./routers/routerExports');
 const {localStrategy, jwtStrategy} = require('./auth/strategies');
 const app = express();
 app.use(jsonParser);
@@ -25,6 +27,8 @@ passport.use(jwtStrategy);
 
 
 app.use('/api/users',userRouter);
+app.use('/api/students',studentRouter);
+app.use('/api/lessons',lessonRouter);
 
 function runServer( databaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
