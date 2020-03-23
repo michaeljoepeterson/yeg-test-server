@@ -9,6 +9,7 @@ const {userRouter} = require('./routers/routerExports');
 const {studentRouter} = require('./routers/routerExports');
 const {lessonRouter} = require('./routers/routerExports');
 const {localStrategy, jwtStrategy} = require('./auth/strategies');
+const {router: authRouter} = require('./auth/router');
 const app = express();
 app.use(jsonParser);
 app.set('trust proxy', true)
