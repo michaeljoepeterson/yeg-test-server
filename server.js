@@ -29,6 +29,7 @@ passport.use(jwtStrategy);
 app.use('/api/users',userRouter);
 app.use('/api/students',studentRouter);
 app.use('/api/lessons',lessonRouter);
+app.use('/api/auth/', authRouter);
 
 function runServer( databaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
