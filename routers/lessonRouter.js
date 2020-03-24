@@ -1,16 +1,20 @@
 const express = require('express');
 const {Lesson} = require('../models/lesson');
 const router = express.Router();
+const passport = require('passport');
 //const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
+const jwtAuth = passport.authenticate('jwt', { session: false });
+router.use(jwtAuth);
 
 router.post('/',(req,res) => {
-    const {date,lessonType,notes,students} = req.body;
+    const {date,lessonType,notes,students,teacher} = req.body;
 
     return Lesson.create({
         date,
         lessonType,
         notes,
-        students
+        students,
+        teacher
     })
 
     .then(lesson => {

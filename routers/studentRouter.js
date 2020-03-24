@@ -1,7 +1,10 @@
 const express = require('express');
 const {Student} = require('../models/student');
 const router = express.Router();
+const passport = require('passport');
 //const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
+const jwtAuth = passport.authenticate('jwt', { session: false });
+router.use(jwtAuth);
 
 router.post('/',(req,res) => {
     const {firstName,lastName} = req.body;
