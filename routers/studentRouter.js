@@ -32,10 +32,30 @@ router.post('/',(req,res) => {
         }
         return res.json({
             code:500,
-            message:'an error occured'
+            message:'an error occured',
+            error:err
         });
     })
     
+});
+
+router.get('/',(req,res) => {
+    return Student.find({})
+
+    .then(students => {
+       return res.json({
+            code:200,
+            students
+        }); 
+    })
+
+    .catch(err => {
+        return res.json({
+            code:500,
+            message:'an error occured',
+            error:err
+        });
+    });
 });
 
 module.exports = {router};
