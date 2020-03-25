@@ -13,7 +13,8 @@ const userSchema = mongoose.Schema({
 userSchema.methods.serialize = function(){
 	return{
 		username: this.email || '',
-	}
+        id:this._id
+	};
 }
 
 userSchema.methods.validatePassword = function(password){
