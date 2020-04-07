@@ -45,7 +45,7 @@ router.get('/',(req,res) => {
     .then(students => {
        return res.json({
             code:200,
-            students
+            students:students.map(student => student.serialize())
         }); 
     })
 

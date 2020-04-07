@@ -5,6 +5,15 @@ const studentSchema = mongoose.Schema({
     lastName:{type:String,required:true}
 },{minimize:false});
 
+studentSchema.methods.serialize = function(){
+	return{
+		firstName: this.firstName || '',
+    lastName: this.lastName || '',
+    id:this._id,
+    fullName:this.fullName
+	};
+}
+
 studentSchema.virtual("fullName").get(function(){
 	return this.firstName + ' ' + this.lastName;
 })
