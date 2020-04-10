@@ -8,6 +8,16 @@ const lessonSchema = mongoose.Schema({
     teacher:{ type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: false, required: [true, 'No teacher found']}
 });
 
+lessonSchema.methods.serialize = function(){
+	return {
+		id:this._id,
+		lessonType:this.lessonType,
+		students:this.students,
+		teacher:this.teacher,
+		date:this.date
+	};
+};
+
 const Lesson = mongoose.model("Lesson",lessonSchema);
 
 module.exports = {Lesson};

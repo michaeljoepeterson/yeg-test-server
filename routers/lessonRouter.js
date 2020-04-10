@@ -8,7 +8,7 @@ router.use(jwtAuth);
 
 router.post('/',(req,res) => {
     const {date,lessonType,notes,students,teacher} = req.body;
-
+    console.log(req.body);
     return Lesson.create({
         date,
         lessonType,
@@ -29,7 +29,7 @@ router.post('/',(req,res) => {
         if(err.message.includes('E11000')){
             return res.json({
                 code:401,
-                message:'User already exists'
+                message:'Lesson already exists'
             });
         }
         return res.json({
@@ -38,6 +38,25 @@ router.post('/',(req,res) => {
         });
     })
     
+});
+
+router.get('/',(req,res) => {
+    return Lesson.find({}).populate('students').populate('teacher')
+
+    .then(lessons => {
+       return res.json({
+            code:200,
+            lessons:lessons.map(lesson => lesson.serialize())
+        }); 
+    })
+
+    .catch(err => {
+        return res.json({
+            code:500,
+            message:'an error occured',
+            error:err
+        });
+    });
 });
 
 module.exports = {router};
