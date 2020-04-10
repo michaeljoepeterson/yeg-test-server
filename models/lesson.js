@@ -14,7 +14,8 @@ lessonSchema.methods.serialize = function(){
 		lessonType:this.lessonType,
 		students:this.students,
 		teacher:this.teacher,
-		date:this.date
+		date:this.date,
+		notes:this.notes
 	};
 };
 
