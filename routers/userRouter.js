@@ -1,9 +1,11 @@
 const express = require('express');
 const {User} = require('../models/user');
+const {checkAdmin} = require('../tools/toolExports');
 const router = express.Router();
 //const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
 
-router.post('/admin',(req,res) => {
+//create super admin
+router.post('/admin',checkAdmin,(req,res) => {
     const {email,password} = req.body;
 
     return User.hashPassword(password)
