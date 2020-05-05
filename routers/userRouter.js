@@ -2,9 +2,11 @@ const express = require('express');
 const {User} = require('../models/user');
 const router = express.Router();
 const {checkSecret,checkUserLevel} = require('../tools/toolExports');
+const passport = require('passport');
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 router.post('/admin',checkSecret,(req,res) => {
-    const {email,password} = req.body;
+    const {email,password,level} = req.body;
 
     return User.hashPassword(password)
 
@@ -12,7 +14,8 @@ router.post('/admin',checkSecret,(req,res) => {
         return User.create({
             email,
             password:hash,
-            admin:true
+            admin:true,
+            level
         })
     })
 
@@ -39,8 +42,8 @@ router.post('/admin',checkSecret,(req,res) => {
     
 });
 
-router.post('/user',checkUserLevel,(req,res) => {
-    const {email,password} = req.body;
+router.post('/user',jwtAuth,checkUserLevel,(req,res) => {
+    const {email,password,level} = req.body;
 
     return User.hashPassword(password)
 
@@ -48,7 +51,7 @@ router.post('/user',checkUserLevel,(req,res) => {
         return User.create({
             email,
             password:hash,
-            admin:true
+            level
         })
     })
 
