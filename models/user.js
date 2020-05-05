@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+//0 super admin, 1 admin, 2 teacher
 //will need to modify schema for regular users
 const userSchema = mongoose.Schema({
     email:{type:String,required:true,unique:true},
@@ -7,7 +8,8 @@ const userSchema = mongoose.Schema({
     admin:{type:Boolean},
     lastAccess:{type:Date},
     lastLogin:{type:Date},
-    lastLoginAttempt:{type:Date}
+    lastLoginAttempt:{type:Date},
+    level:{type:Number, required: true}
 });
 
 userSchema.methods.serialize = function(){
