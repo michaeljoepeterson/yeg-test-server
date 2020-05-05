@@ -2,15 +2,16 @@ const mongoose = require('mongoose');
 
 const studentSchema = mongoose.Schema({
     firstName:{type:String,required:true},
-    lastName:{type:String,required:true}
+    lastName:{type:String,required:true},
+    category:{type:String,required:true}
 },{minimize:false});
 
 studentSchema.methods.serialize = function(){
 	return{
 		firstName: this.firstName || '',
-    lastName: this.lastName || '',
-    id:this._id,
-    fullName:this.fullName
+        lastName: this.lastName || '',
+        id:this._id,
+        fullName:this.fullName
 	};
 }
 
