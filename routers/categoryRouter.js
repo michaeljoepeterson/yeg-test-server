@@ -19,7 +19,7 @@ router.post('/',checkIsAdmin,(req,res) => {
         return res.json({
             code:200,
             message:'category created',
-            fullName:category.name
+            name:category.name
         });
     })
 
@@ -41,12 +41,12 @@ router.post('/',checkIsAdmin,(req,res) => {
 });
 
 router.get('/',(req,res) => {
-    return Student.find({})
+    return Category.find({})
 
-    .then(students => {
+    .then(categories => {
        return res.json({
             code:200,
-            students:students.map(student => student.serialize())
+            categories:categories.map(student => student.serialize())
         }); 
     })
 
