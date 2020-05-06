@@ -1,11 +1,9 @@
 const express = require('express');
 const {User} = require('../models/user');
-const {checkAdmin} = require('../tools/toolExports');
 const router = express.Router();
-const {checkSecret,checkUserLevel} = require('../tools/toolExports');
+const {checkSecret,checkUserLevel,checkAdmin} = require('../tools/toolExports');
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
-
 
 router.post('/admin',checkSecret,checkAdmin,(req,res) => {
     const {email,password} = req.body;

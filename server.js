@@ -5,9 +5,7 @@ const {PORT, DATABASE_URL } = require('./config');
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
-const {userRouter} = require('./routers/routerExports');
-const {studentRouter} = require('./routers/routerExports');
-const {lessonRouter} = require('./routers/routerExports');
+const {lessonRouter,studentRouter,userRouter,categoryrouter} = require('./routers/routerExports');
 const {localStrategy, jwtStrategy} = require('./auth/strategies');
 const {router: authRouter} = require('./auth/router');
 const app = express();
@@ -31,6 +29,7 @@ app.use('/api/users',userRouter);
 app.use('/api/students',studentRouter);
 app.use('/api/lessons',lessonRouter);
 app.use('/api/auth/', authRouter);
+app.use('/api/category',categoryrouter);
 
 function runServer( databaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
