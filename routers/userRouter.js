@@ -2,11 +2,49 @@ const express = require('express');
 const {User} = require('../models/user');
 const {checkAdmin} = require('../tools/toolExports');
 const router = express.Router();
-//const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
+const {checkSecret,checkUserLevel} = require('../tools/toolExports');
+const passport = require('passport');
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
-//create super admin
-router.post('/admin',checkAdmin,(req,res) => {
+
+router.post('/admin',checkSecret,checkAdmin,(req,res) => {
     const {email,password} = req.body;
+    return User.hashPassword(password)
+
+    .then(hash => {
+        return User.create({
+            email,
+            password:hash,
+            admin:true,
+            level
+        })
+    })
+
+    .then(user => {
+        return res.json({
+            code:200,
+            message:'User created'
+        });
+    })
+
+    .catch(err => {
+        console.log('error ',err);
+        if(err.message.includes('E11000')){
+            return res.json({
+                code:401,
+                message:'User already exists'
+            });
+        }
+        return res.json({
+            code:500,
+            message:'an error occured'
+        });
+    })
+    
+});
+
+router.post('/user',jwtAuth,checkUserLevel,(req,res) => {
+    const {email,password,level} = req.body;
 
     return User.hashPassword(password)
 
@@ -14,7 +52,7 @@ router.post('/admin',checkAdmin,(req,res) => {
         return User.create({
             email,
             password:hash,
-            admin:true
+            level
         })
     })
 

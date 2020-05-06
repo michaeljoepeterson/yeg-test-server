@@ -7,11 +7,12 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 router.use(jwtAuth);
 
 router.post('/',(req,res) => {
-    const {firstName,lastName} = req.body;
+    const {firstName,lastName,category} = req.body;
 
     return Student.create({
         firstName,
-        lastName
+        lastName,
+        category
     })
 
     .then(student => {
