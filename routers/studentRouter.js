@@ -2,11 +2,12 @@ const express = require('express');
 const {Student} = require('../models/student');
 const router = express.Router();
 const passport = require('passport');
+const {checkIsAdmin} = require('../tools/toolExports');
 //const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 router.use(jwtAuth);
 
-router.post('/',(req,res) => {
+router.post('/',checkIsAdmin,(req,res) => {
     const {firstName,lastName,category} = req.body;
 
     return Student.create({
@@ -41,7 +42,7 @@ router.post('/',(req,res) => {
 });
 
 router.get('/',(req,res) => {
-    return Student.find({})
+    return Student.find({}).populate('category')
 
     .then(students => {
        return res.json({
