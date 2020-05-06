@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+//change category to id relationship to category model
 const studentSchema = mongoose.Schema({
     firstName:{type:String,required:true},
     lastName:{type:String,required:true},
