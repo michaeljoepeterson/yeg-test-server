@@ -1,5 +1,5 @@
 const express = require('express');
-const {Category} = require('../models/category');
+const {Category} = require('../models/Category');
 const router = express.Router();
 const passport = require('passport');
 const {checkIsAdmin} = require('../tools/toolExports');
