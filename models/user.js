@@ -15,7 +15,8 @@ const userSchema = mongoose.Schema({
 userSchema.methods.serialize = function(){
 	return{
 		username: this.email || '',
-        id:this._id
+        id:this._id,
+        level:this.level
 	};
 }
 
