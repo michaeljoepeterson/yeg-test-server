@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
-const {PORT, DATABASE_URL } = require('./config');
+const {PORT, DATABASE_URL,DOMAINS } = require('./config');
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -12,6 +12,11 @@ const app = express();
 app.use(jsonParser);
 app.set('trust proxy', true)
 app.use(function (req, res, next) {
+    let origin = req.headers.origin;
+    let allowedOrigins = DOMAINS.split(',');
+    if(allowedOrigins.indexOf(origin) > -1){
+       res.setHeader('Access-Control-Allow-Origin', origin);
+    }
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,Accept');
     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
