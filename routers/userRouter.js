@@ -6,7 +6,7 @@ const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 router.post('/admin',checkSecret,checkAdmin,(req,res) => {
-    const {email,password} = req.body;
+    const {email,password,level} = req.body;
     return User.hashPassword(password)
 
     .then(hash => {
