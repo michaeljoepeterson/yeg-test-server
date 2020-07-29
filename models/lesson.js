@@ -6,8 +6,8 @@ const lessonSchema = mongoose.Schema({
     notes:{type:String},
     students:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Student', unique: false, required: [false, 'No students found']}],
 	teacher:{ type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: false, required: [true, 'No teacher found']},
-	createdAt:{type:Date,required:true},
-	lastEdited:{type:Date,required:true},
+	createdAt:{type:Date},
+	lastEdited:{type:Date},
 	totalEdits:{type:Number,default:0}
 });
 
