@@ -3,6 +3,7 @@ const {Lesson} = require('../models/lesson');
 const {User} = require('../models/user');
 const router = express.Router();
 const passport = require('passport');
+const user = require('../models/user');
 //const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 router.use(jwtAuth);
@@ -75,16 +76,25 @@ function findById(id){
     return promise;
 }
 
-function findByEmail(id){
+function findByEmail(email){
     let promise = new Promise((resolve,reject) => {
-        return Lesson.find({}).populate('students').populate('teacher')
+        return User.find({email})
+
+        .then(user => {
+            let id = user[0]._id;
+            console.log(user);
+            console.log(id);
+            return findById(id);
+        })
 
         .then(lessons => {
-            resolve(lessons)
+            resolve(lessons);
         })
+
         .catch(err => {
             reject(err);
         });
+
     });
 
     return promise;
@@ -92,6 +102,7 @@ function findByEmail(id){
 
 router.get('/search',(req,res) => {
     let {id,email} = req.query;
+    console.log(id,email);
     if(id){
         return findById(id)
 
@@ -110,7 +121,22 @@ router.get('/search',(req,res) => {
         });
     }
     else if(email){
+        return findByEmail(email)
 
+        .then(lessons => {
+
+            return res.json({
+                code:200,
+                lessons:lessons.map(lesson => lesson.serialize())
+            }); 
+        })
+        .catch(err => {
+            return res.json({
+                code:500,
+                message:'an error occured',
+                error:err
+            });
+        });
     }
     
 });
