@@ -5,7 +5,10 @@ const lessonSchema = mongoose.Schema({
     lessonType:{type:String,required:true},
     notes:{type:String},
     students:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Student', unique: false, required: [false, 'No students found']}],
-    teacher:{ type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: false, required: [true, 'No teacher found']}
+	teacher:{ type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: false, required: [true, 'No teacher found']},
+	createdAt:{type:Date,required:true},
+	lastEdited:{type:Date,required:true},
+	totalEdits:{type:Number,default:0}
 });
 
 lessonSchema.methods.serialize = function(){
