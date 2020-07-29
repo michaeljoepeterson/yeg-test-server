@@ -141,4 +141,44 @@ router.get('/search',(req,res) => {
     
 });
 
+function createUpdateData(body){
+    let data = {};
+    let today = new Date();
+    for(let field in body){
+        data[field] = body[field];
+    }
+    //pass from browser?
+    data.lastEdited = data.lastEdited ? data.lastEdited : today;
+
+    return data;
+}
+
+router.put('/:id',(req,res) => {
+    let {id} = req.params;
+    const updateData = createUpdateData(req.body);
+
+    return Lesson.findOneAndUpdate({'_id':id},{
+        $set:updateData,
+        $inc:{"totalEdits":1}
+    },{
+        useFindAndModify:false
+    })
+
+    .then(response => {
+        return res.json({
+            code:200,
+            message:'Lesson Updated'
+        });
+    })
+
+    .catch( err=> {
+        console.log('Error updating lesson ',err);
+        return res.json({
+            code:500,
+            message:'Error Updating lesson',
+            error:err.errmsg
+        });
+    });
+});
+
 module.exports = {router};
