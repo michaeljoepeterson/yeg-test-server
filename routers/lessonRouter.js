@@ -61,9 +61,19 @@ router.get('/',(req,res) => {
     });
 });
 
-function findById(id){
+function findById(id,start,end){
     let promise = new Promise((resolve,reject) => {
-        return Lesson.find({teacher:id}).populate('students').populate('teacher')
+        let query = {
+            teacher:id
+        };
+        if(start && end){
+            query["date"] = {
+                $gte:end,
+                $lte:start
+            }
+        }
+        console.log(query);
+        return Lesson.find(query).populate('students').populate('teacher')
 
         .then(lessons => {
             resolve(lessons)
@@ -76,9 +86,37 @@ function findById(id){
     return promise;
 }
 
-function findByEmail(email){
+function findByEmail(email,start,end){
     let promise = new Promise((resolve,reject) => {
         return User.find({email})
+
+        .then(user => {
+            let id = user[0]._id;
+            return findById(id,start,end);
+        })
+
+        .then(lessons => {
+            resolve(lessons);
+        })
+
+        .catch(err => {
+            reject(err);
+        });
+
+    });
+
+    return promise;
+}
+
+function generalSearch(start,end,id,email){
+    let promise = new Promise((resolve,reject) => {
+        let query = {};
+        return User.find({
+            date:{
+                $gte:end,
+                $lte:start
+            }
+        })
 
         .then(user => {
             let id = user[0]._id;
@@ -100,11 +138,23 @@ function findByEmail(email){
     return promise;
 }
 
-router.get('/search',(req,res) => {
-    let {id,email} = req.query;
+router.get('/my-lessons',(req,res) => {
+    let {id,email,startDate,endDate} = req.query;
+    let start = startDate ? new Date(startDate) : new Date();
+    //inclusive of start day
+    start.setDate(start.getDate() + 1);
+    let end = endDate ? new Date(endDate) : new Date(start);
+    if(!endDate){
+        const defaultRange = 30;
+        end.setDate(end.getDate() - 30);
+    }
+    //inclusive of end day
+    end.setDate(end.getDate() - 1);
+    start.setHours(0,0,0,0);
+    end.setHours(0,0,0,0);
     console.log(id,email);
     if(id){
-        return findById(id)
+        return findById(id,start,end)
 
         .then(lessons => {
             return res.json({
@@ -121,7 +171,7 @@ router.get('/search',(req,res) => {
         });
     }
     else if(email){
-        return findByEmail(email)
+        return findByEmail(email,start,end)
 
         .then(lessons => {
 
