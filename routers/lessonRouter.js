@@ -1,9 +1,8 @@
 const express = require('express');
 const {Lesson} = require('../models/lesson');
-const {User} = require('../models/user');
 const router = express.Router();
 const passport = require('passport');
-const user = require('../models/user');
+const {findById,findByEmail,generalSearch} = require('./tools/search');
 //const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 router.use(jwtAuth);
@@ -61,83 +60,6 @@ router.get('/',(req,res) => {
     });
 });
 
-function findById(id,start,end){
-    let promise = new Promise((resolve,reject) => {
-        let query = {
-            teacher:id
-        };
-        if(start && end){
-            query["date"] = {
-                $gte:end,
-                $lte:start
-            }
-        }
-        console.log(query);
-        return Lesson.find(query).populate('students').populate('teacher')
-
-        .then(lessons => {
-            resolve(lessons)
-        })
-        .catch(err => {
-            reject(err);
-        });
-    });
-
-    return promise;
-}
-
-function findByEmail(email,start,end){
-    let promise = new Promise((resolve,reject) => {
-        return User.find({email})
-
-        .then(user => {
-            let id = user[0]._id;
-            return findById(id,start,end);
-        })
-
-        .then(lessons => {
-            resolve(lessons);
-        })
-
-        .catch(err => {
-            reject(err);
-        });
-
-    });
-
-    return promise;
-}
-
-function generalSearch(start,end,id,email){
-    let promise = new Promise((resolve,reject) => {
-        let query = {};
-        return User.find({
-            date:{
-                $gte:end,
-                $lte:start
-            }
-        })
-
-        .then(user => {
-            let id = user[0]._id;
-            console.log(user);
-            console.log(id);
-            return findById(id);
-        })
-
-        .then(lessons => {
-            resolve(lessons);
-        })
-
-        .catch(err => {
-            reject(err);
-        });
-
-    });
-
-    return promise;
-}
-
 router.get('/my-lessons',(req,res) => {
     let {id,email,startDate,endDate} = req.query;
     let start = startDate ? new Date(startDate) : new Date();
@@ -152,7 +74,7 @@ router.get('/my-lessons',(req,res) => {
     end.setDate(end.getDate() - 1);
     start.setHours(0,0,0,0);
     end.setHours(0,0,0,0);
-    console.log(id,email);
+    console.log(id,email,findById);
     if(id){
         return findById(id,start,end)
 
