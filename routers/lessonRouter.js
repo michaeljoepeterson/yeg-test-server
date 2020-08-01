@@ -3,6 +3,7 @@ const {Lesson} = require('../models/lesson');
 const router = express.Router();
 const passport = require('passport');
 const {findById,findByEmail,generalSearch} = require('./tools/search');
+const {totalHours,totalStudents,hourBreakdown} = require('./tools/hours');
 //const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 router.use(jwtAuth);
@@ -151,6 +152,68 @@ router.put('/:id',(req,res) => {
             error:err.errmsg
         });
     });
+});
+
+router.get('/summary',(req,res) => {
+    let {id,email,startDate,endDate} = req.query;
+    let start = startDate ? new Date(startDate) : new Date();
+    //inclusive of start day
+    start.setDate(start.getDate() + 1);
+    let end = endDate ? new Date(endDate) : new Date(start);
+    if(!endDate){
+        const defaultRange = 30;
+        end.setDate(end.getDate() - 30);
+    }
+    //inclusive of end day
+    end.setDate(end.getDate() - 1);
+    start.setHours(0,0,0,0);
+    end.setHours(0,0,0,0);
+    console.log(id,email,findById);
+    if(id){
+        return findById(id,start,end)
+
+        .then(lessons => {
+            let lessonData = {};
+            let serializedLessons = lessons.map(lesson => lesson.serialize());
+            lessonData.totalHours = totalHours(serializedLessons);
+            lessonData.totalStudents = totalStudents(serializedLessons);
+            lessonData.hours = hourBreakdown(serializedLessons);
+            return res.json({
+                code:200,
+                lessonData
+            }); 
+        })
+        .catch(err => {
+            return res.json({
+                code:500,
+                message:'an error occured',
+                error:err
+            });
+        });
+    }
+    else if(email){
+        return findByEmail(email,start,end)
+
+        .then(lessons => {
+            let lessonData = {};
+            let serializedLessons = lessons.map(lesson => lesson.serialize());
+            lessonData.totalHours = totalHours(serializedLessons);
+            lessonData.totalStudents = totalStudents(serializedLessons);
+            lessonData.hours = hourBreakdown(serializedLessons);
+            return res.json({
+                code:200,
+                lessonData
+            }); 
+        })
+        .catch(err => {
+            return res.json({
+                code:500,
+                message:'an error occured',
+                error:err
+            });
+        });
+    }
+    
 });
 
 module.exports = {router};
