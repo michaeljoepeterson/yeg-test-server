@@ -77,4 +77,27 @@ router.post('/user',jwtAuth,checkUserLevel,(req,res) => {
     
 });
 
+
+router.get('/',jwtAuth,(req,res) => {
+    const {email,password,level} = req.body;
+
+    return User.find({})
+
+    .then(users => {
+        return res.json({
+            code:200,
+            users:users.map(user => user.serialize())
+        });
+    })
+
+    .catch(err => {
+        console.log('error ',err);
+
+        return res.json({
+            code:500,
+            message:'an error occured'
+        });
+    })
+    
+});
 module.exports = {router};
