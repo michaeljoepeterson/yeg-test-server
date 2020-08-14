@@ -13,7 +13,12 @@ function findById(id,start,end){
             }
         }
         console.log(query);
-        return Lesson.find(query).populate('students').populate('teacher')
+        return Lesson.find(query).populate('teacher').populate({
+            path:'students',
+            populate:{
+                path:'category'
+            }
+        })
 
         .then(lessons => {
             resolve(lessons)

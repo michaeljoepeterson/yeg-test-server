@@ -43,8 +43,13 @@ router.post('/',(req,res) => {
 });
 
 router.get('/',(req,res) => {
-    return Lesson.find({}).populate('students').populate('teacher')
-
+    //return Lesson.find({}).populate('students').populate('teacher')
+    return Lesson.find({}).populate('teacher').populate({
+        path:'students',
+        populate:{
+            path:'category'
+        }
+    })
     .then(lessons => {
        return res.json({
             code:200,

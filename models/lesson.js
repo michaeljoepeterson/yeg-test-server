@@ -15,8 +15,8 @@ lessonSchema.methods.serialize = function(){
 	return {
 		id:this._id,
 		lessonType:this.lessonType,
-		students:this.students,
-		teacher:this.teacher,
+		students:this.students ? this.students.map(student => student.serialize()) : null,
+		teacher:this.teacher ? this.teacher.serialize() : null,
 		date:this.date,
 		notes:this.notes
 	};
