@@ -221,12 +221,22 @@ router.get('/summary',(req,res) => {
     
 });
 //to do error handler middleware at server leel
-router.get('/search-student/:id',async (req,res) => {
-    let {id} = req.params;
+router.get('/search-student',async (req,res) => {
+    let {id} = req.query;
     try{
-        await Lesson.find({students:id})
+        let lessons = await Lesson.find({students:id}).populate('teacher').populate({
+            path:'students',
+            populate:{
+                path:'category'
+            }
+        });
+        return res.json({
+            code:200,
+            lessons:lessons.map(lesson => lesson.serialize())
+        });
     }
     catch(err){
+        console.log(err);
         return res.json({
             code:500,
             message:'an error occured',
