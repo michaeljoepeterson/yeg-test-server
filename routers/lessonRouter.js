@@ -215,5 +215,19 @@ router.get('/summary',(req,res) => {
     }
     
 });
+//to do error handler middleware at server leel
+router.get('/search-student/:id',async (req,res) => {
+    let {id} = req.params;
+    try{
+        await Lesson.find({students:id})
+    }
+    catch(err){
+        return res.json({
+            code:500,
+            message:'an error occured',
+            error:err
+        });
+    }
+});
 
 module.exports = {router};

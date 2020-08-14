@@ -12,7 +12,7 @@ studentSchema.methods.serialize = function(){
         lastName: this.lastName || '',
         id:this._id,
         fullName:this.fullName,
-        category:this.category
+        category:this.category ? this.category.map(resp => resp.serialize()) : []
 	};
 }
 
