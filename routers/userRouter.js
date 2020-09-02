@@ -109,7 +109,6 @@ router.put('/',async (req,res) => {
         const user = users[0];
         
         if(user && !user.password){
-            console.log(user);
             const hash = await User.hashPassword(password);
             const users = await User.findOneAndUpdate({ email }, {
                 $set: { password: hash }
