@@ -5,7 +5,7 @@ const {PORT, DATABASE_URL,DOMAINS } = require('./config');
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
-const {lessonRouter,studentRouter,userRouter,categoryrouter} = require('./routers/routerExports');
+const {router} = require('./routers/routerExports');
 const {localStrategy, jwtStrategy} = require('./auth/strategies');
 const {router: authRouter} = require('./auth/router');
 const app = express();
@@ -28,12 +28,15 @@ app.use(function (req, res, next) {
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-
+app.use('/api/auth/', authRouter);
+/*
 app.use('/api/users',userRouter);
 app.use('/api/students',studentRouter);
 app.use('/api/lessons',lessonRouter);
-app.use('/api/auth/', authRouter);
+
 app.use('/api/category',categoryrouter);
+*/
+app.use('/api',router);
 
 function runServer( databaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
