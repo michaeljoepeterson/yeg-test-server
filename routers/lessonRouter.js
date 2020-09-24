@@ -182,7 +182,9 @@ router.get('/summary',(req,res) => {
             let serializedLessons = lessons.map(lesson => lesson.serialize());
             lessonData.totalHours = totalHours(serializedLessons);
             lessonData.totalStudents = totalStudents(serializedLessons);
-            lessonData.hours = hourBreakdown(serializedLessons);
+            let hourData = hourBreakdown(serializedLessons);
+            lessonData.hours = hourData[0];
+            lessonData.students = hourData[1];
             return res.json({
                 code:200,
                 lessonData
@@ -204,7 +206,9 @@ router.get('/summary',(req,res) => {
             let serializedLessons = lessons.map(lesson => lesson.serialize());
             lessonData.totalHours = totalHours(serializedLessons);
             lessonData.totalStudents = totalStudents(serializedLessons);
-            lessonData.hours = hourBreakdown(serializedLessons);
+            let hourData = hourBreakdown(serializedLessons);
+            lessonData.hours = hourData[0];
+            lessonData.students = hourData[1];
             return res.json({
                 code:200,
                 lessonData

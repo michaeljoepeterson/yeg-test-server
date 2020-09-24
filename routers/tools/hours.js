@@ -31,14 +31,17 @@ function hourBreakdown(lessons){
     };
 
     let hourBreakDown = {};
+    let studentBreakDown = {};
 
     for(let i = 0;i < lessons.length;i++){
         let students = lessons[i].students.length;
         let pay = hourMap[students] || hourMap[students] === 0 ? hourMap[students] : hourMap[12];
         hourBreakDown[pay] = hourBreakDown[pay] ? hourBreakDown[pay] + 1 : 1;
+        studentBreakDown[pay] = students;
     }
 
-    return hourBreakDown;
+    return [hourBreakDown,studentBreakDown];
 }
+
 
 module.exports = {totalHours,totalStudents,hourBreakdown};
