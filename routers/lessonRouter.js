@@ -248,11 +248,12 @@ router.get('/search-student',async (req,res) => {
 router.get('/search',async (req,res) => {
     //to do user secure endpoints
     //console.log(req.user);
-    let {startDate,endDate,teacherEmail} = req.query;
+    let {startDate,endDate,teacherEmail,studentId} = req.query;
     let searchOptions = {
         startDate,
         endDate,
-        teacherEmail
+        teacherEmail,
+        studentId
     };
     try{
         let lessons = await generalSearch(searchOptions)

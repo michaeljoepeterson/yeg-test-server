@@ -74,11 +74,12 @@ async function findTeacher(teacherId,teacherEmail){
 async function findStudent(studentId,first,last){
     try{
         if(studentId){
-            let students = await Student.findById(studentId);
-            return students;
+            let student = await Student.findById(studentId).populate('category');
+            return student.serialize();
         }
         else{
             let students = await Student.find({firstName:first,lastName:last});
+            students = students.map(student => student.serialize());
             return students;
         }
     }
@@ -101,15 +102,15 @@ async function queryBuilder(options){
         query.date.$lte = start;
     }
     if(studentId){
-        let students = await findStudent(studentId);
-        students = students.map(student => student.serialize());
-        query.students = students[0].id;
+        let student = await findStudent(studentId);
+        query.students = student.id;
     }
     else if(studentFirst && studentLast){
         let students = await findStudent(null,studentFirst,studentLast);
-        students = students.map(student => student.serialize());
+        
         //in this caes do multiple queries to get lessons of all students with same name
-        query.students = students.map(student => student.id);
+        //query.students = students.map(student => student.id);
+        query.students = students[0].id;
     }
 
     if(teacherId){
