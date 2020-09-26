@@ -4,41 +4,39 @@ const router = express.Router();
 const passport = require('passport');
 const {findById,findByEmail,generalSearch} = require('./tools/search');
 const {totalHours,totalStudents,hourBreakdown} = require('./tools/hours');
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 //const {checkAdminEmails,checkEmail,checkUser,checkAdminLocs} = require('../tools/toolExports');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 router.use(jwtAuth);
 
-router.post('/',(req,res) => {
+router.post('/',async (req,res) => {
     const {date,lessonType,notes,students,teacher} = req.body;
     console.log(req.body);
-    return Lesson.create({
-        date,
-        lessonType,
-        notes,
-        students,
-        teacher
-    })
-
-    .then(lesson => {
-        return res.json({
-            code:200,
-            message:'Lesson created'
+    try {
+        const lesson = await Lesson.create({
+            date,
+            lessonType,
+            notes,
+            students,
+            teacher
         });
-    })
-
-    .catch(err => {
-        console.log('error ',err);
-        if(err.message.includes('E11000')){
+        return res.json({
+            code: 200,
+            message: 'Lesson created'
+        });
+    } catch (err) {
+        console.log('error ', err);
+        if (err.message.includes('E11000')) {
             return res.json({
-                code:401,
-                message:'Lesson already exists'
+                code: 401,
+                message: 'Lesson already exists'
             });
         }
         return res.json({
-            code:500,
-            message:'an error occured'
+            code: 500,
+            message: 'an error occured'
         });
-    })
+    }
     
 });
 
@@ -131,32 +129,29 @@ function createUpdateData(body){
     return data;
 }
 
-router.put('/:id',(req,res) => {
+router.put('/:id',async (req,res) => {
     let {id} = req.params;
     const updateData = createUpdateData(req.body);
 
-    return Lesson.findOneAndUpdate({'_id':id},{
-        $set:updateData,
-        $inc:{"totalEdits":1}
-    },{
-        useFindAndModify:false
-    })
-
-    .then(response => {
-        return res.json({
-            code:200,
-            message:'Lesson Updated'
+    try {
+        const response = await Lesson.findOneAndUpdate({ '_id': id }, {
+            $set: updateData,
+            $inc: { "totalEdits": 1 }
+        }, {
+            useFindAndModify: false
         });
-    })
-
-    .catch( err=> {
-        console.log('Error updating lesson ',err);
         return res.json({
-            code:500,
-            message:'Error Updating lesson',
-            error:err.errmsg
+            code: 200,
+            message: 'Lesson Updated'
         });
-    });
+    } catch (err) {
+        console.log('Error updating lesson ', err);
+        return res.json({
+            code: 500,
+            message: 'Error Updating lesson',
+            error: err.errmsg
+        });
+    }
 });
 
 router.get('/summary',(req,res) => {
@@ -234,6 +229,32 @@ router.get('/search-student',async (req,res) => {
                 path:'category'
             }
         });
+        return res.json({
+            code:200,
+            lessons:lessons.map(lesson => lesson.serialize())
+        });
+    }
+    catch(err){
+        console.log(err);
+        return res.json({
+            code:500,
+            message:'an error occured',
+            error:err
+        });
+    }
+});
+
+
+router.get('/search',async (req,res) => {
+    //to do user secure endpoints
+    //console.log(req.user);
+    let {startDate,endDate} = req.query;
+    let searchOptions = {
+        startDate,
+        endDate
+    };
+    try{
+        let lessons = await generalSearch(searchOptions)
         return res.json({
             code:200,
             lessons:lessons.map(lesson => lesson.serialize())
