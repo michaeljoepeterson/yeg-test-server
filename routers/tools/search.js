@@ -54,13 +54,19 @@ function findByEmail(email,start,end){
     return promise;
 }
 
-async function findTeacher(teacherId){
+async function findTeacher(teacherId,teacherEmail){
     try{
-        let teacher = await User.findById(teacherId);
-        return teacher[0].serialze();
+        if(teacherId){
+            let teacher = await User.findById(teacherId);
+            return teacher[0].serialize();
+        }
+        else{
+            let teacher = await User.find({email:teacherEmail});
+            return teacher[0].serialize();
+        }
     }
     catch(e){
-        console.log('error finding student: ',e);
+        console.log('error finding teacher: ',e);
         throw e
     }
 }
@@ -83,7 +89,7 @@ async function findStudent(studentId,first,last){
 }
 
 async function queryBuilder(options){
-    let {startDate,endDate,studentId,studentFirst,studentLast,teacherId,lessonType} = options;
+    let {startDate,endDate,studentId,studentFirst,studentLast,teacherId,lessonType,teacherEmail} = options;
     let query = {};
     if(endDate){
         let start = startDate ? new Date(startDate) : new Date();
@@ -108,6 +114,10 @@ async function queryBuilder(options){
 
     if(teacherId){
         let teacher = await findTeacher(teacherId);
+        query.teacher = teacher.id;
+    }
+    else if(teacherEmail){
+        let teacher = await findTeacher(null,teacherEmail);
         query.teacher = teacher.id;
     }
 
