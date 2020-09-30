@@ -58,7 +58,7 @@ async function findTeacher(teacherId,teacherEmail){
     try{
         if(teacherId){
             let teacher = await User.findById(teacherId);
-            return teacher[0].serialize();
+            return teacher.serialize();
         }
         else{
             let teacher = await User.find({email:teacherEmail});
@@ -92,6 +92,7 @@ async function findStudent(studentId,first,last){
 async function queryBuilder(options){
     let {startDate,endDate,studentId,studentFirst,studentLast,teacherId,lessonType,teacherEmail} = options;
     let query = {};
+    console.log('options=========',options);
     if(endDate){
         let start = startDate ? new Date(startDate) : new Date();
         //inclusive of start day
