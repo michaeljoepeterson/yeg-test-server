@@ -76,5 +76,24 @@ router.put('/:id',levelAccess(1),async (req,res) => {
         });
     }
 });
+//hide user
+router.delete('/:id',levelAccess(1),async (req,res) => {
+    const {id} = req.params; 
+    try {
+        await Student.findOneAndUpdate({ _id:id }, {
+            $set: {access:false}
+        });
+        return res.json({
+            code: 200,
+            message:"Student removed"
+        });
+    } catch (err) {
+        return res.json({
+            code: 500,
+            message: 'an error occured',
+            error: err
+        });
+    }
+});
 
 module.exports = {router};

@@ -19,7 +19,7 @@ function findById(id,start,end){
             populate:{
                 path:'category'
             }
-        })
+        }).populate('_lessonType')
 
         .then(lessons => {
             resolve(lessons)
@@ -135,7 +135,7 @@ async function generalSearch(options){
             populate:{
                 path:'category'
             }
-        });
+        }).populate('_lessonType');
         return lessons
     } catch (err) {
         throw(err);
