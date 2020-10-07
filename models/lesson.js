@@ -10,7 +10,8 @@ const lessonSchema = mongoose.Schema({
 	lastEdited:{type:Date},
 	totalEdits:{type:Number,default:0}
 });
-
+//virtual to facilitate joining by string
+//also could have just adjusted serialize method
 lessonSchema.virtual('_lessonType', {
 	ref: 'LessonType',
 	localField: 'lessonType',
