@@ -1,7 +1,7 @@
 const {Lesson} = require('../../models/lesson');
 const {User} = require('../../models/user');
 const {Student} = require('../../models/student');
-
+//could extract into pipes within lesson model
 function findById(id,start,end){
     let promise = new Promise((resolve,reject) => {
         let query = {

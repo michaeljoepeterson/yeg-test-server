@@ -9,16 +9,28 @@ const userSchema = mongoose.Schema({
     lastAccess:{type:Date},
     lastLogin:{type:Date},
     lastLoginAttempt:{type:Date},
-    level:{type:Number, required: true}
+    level:{type:Number, required: true},
+    firstName:{type:String, default:null},
+    lastName:{type:String, default:null},
 });
 
 userSchema.methods.serialize = function(){
 	return{
 		username: this.email || '',
         id:this._id,
-        level:this.level
+        level:this.level,
+        fullName:this.fullName
 	};
 }
+
+userSchema.virtual("fullName").get(function(){
+    if(this.firstName && this.lastName){
+        return this.firstName + ' ' + this.lastName;
+    }
+    else{
+        return null;
+    }
+})
 
 userSchema.methods.validatePassword = function(password){
 	return bcrypt.compare(password, this.password);
