@@ -1,7 +1,7 @@
 const express = require('express');
 const {User} = require('../models/user');
 const router = express.Router();
-const {checkSecret,checkUserLevel,checkAdmin} = require('../tools/toolExports');
+const {checkSecret,checkUserLevel,checkAdmin,levelAccess} = require('../tools/toolExports');
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
@@ -135,6 +135,31 @@ router.put('/',async (req,res) => {
     }
     
 });
+//update user
+router.put('/:email',jwtAuth,levelAccess(0),async (req,res) => {
+    const {email} = req.params;
+    const {user} = req.body;
+
+    try {
+        const users = await User.findOneAndUpdate({ email }, {
+            $set: user
+        });
+        return res.json({
+            code: 200,
+            message:'updated user'
+        });
+        
+    }
+    catch (err) {
+        console.log('error ', err);
+        return res.json({
+            code: 500,
+            message: 'an error occured'
+        });
+    }
+    
+});
+
 
 
 router.put('/reset',checkSecret,jwtAuth,async (req,res) => {

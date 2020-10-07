@@ -9,6 +9,8 @@ const {router} = require('./routers/routerExports');
 const {localStrategy, jwtStrategy} = require('./auth/strategies');
 const {router: authRouter} = require('./auth/router');
 const app = express();
+mongoose.set('useFindAndModify', false);
+
 app.use(jsonParser);
 app.set('trust proxy', true)
 app.use(function (req, res, next) {

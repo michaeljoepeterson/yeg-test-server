@@ -228,7 +228,7 @@ router.get('/search-student',async (req,res) => {
             populate:{
                 path:'category'
             }
-        });
+        }).populate('_lessonType');
         return res.json({
             code:200,
             lessons:lessons.map(lesson => lesson.serialize())

@@ -7,9 +7,29 @@ let checkUserLevel = function(req,res,next){
     else{
         return res.status(422).json({
 			code:400,
-			message:"Unathorized"
+			message:"Unauthorized"
 		});
     }
 }
 
-module.exports = {checkUserLevel};
+let levelAccess = function(level){
+    return async (req, res, next) => {
+        try {
+            let {userLevel} = req.query;
+            if(userLevel <= level){
+                next();
+            }
+            else{
+                throw {message:'Unauthorized'}
+            }
+        }
+        catch (error) {
+            return res.status(422).json({
+                code:400,
+                message:"Unauthorized"
+            });
+        }
+    }
+}
+
+module.exports = {checkUserLevel,levelAccess};

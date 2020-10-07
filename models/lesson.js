@@ -10,15 +10,24 @@ const lessonSchema = mongoose.Schema({
 	lastEdited:{type:Date},
 	totalEdits:{type:Number,default:0}
 });
+//virtual to facilitate joining by string
+//also could have just adjusted serialize method
+lessonSchema.virtual('_lessonType', {
+	ref: 'LessonType',
+	localField: 'lessonType',
+	foreignField: 'name', 
+	justOne: true
+});
 
 lessonSchema.methods.serialize = function(){
 	return {
 		id:this._id,
-		lessonType:this.lessonType,
+		lessonType:this._lessonType.name,
 		students:this.students ? this.students.map(student => student.serialize()) : null,
 		teacher:this.teacher ? this.teacher.serialize() : null,
 		date:this.date,
-		notes:this.notes
+		notes:this.notes,
+		oldLessonType:this.lessonType
 	};
 };
 

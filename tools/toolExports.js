@@ -1,7 +1,7 @@
 
 const {checkAdmin} = require('./check-admin');
 const {checkSecret} = require('./checkSecret');
-const {checkUserLevel} = require('./checkUserLevel');
+const {checkUserLevel,levelAccess} = require('./checkUserLevel');
 const {checkIsAdmin} = require('./checkIsAdmin');
 
-module.exports = {checkSecret,checkUserLevel,checkAdmin,checkIsAdmin};
+module.exports = {checkSecret,checkUserLevel,checkAdmin,checkIsAdmin,levelAccess};
