@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const studentSchema = mongoose.Schema({
     firstName:{type:String,required:true},
     lastName:{type:String,required:true},
-    category:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', unique: false, required: [false, 'No students found']}]
+    category:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', unique: false, required: [false, 'No students found']}],
+    active:{type:Boolean,default:false}
 },{minimize:false});
 
 studentSchema.methods.serialize = function(){
