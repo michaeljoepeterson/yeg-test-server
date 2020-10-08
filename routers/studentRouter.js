@@ -8,12 +8,13 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 router.use(jwtAuth);
 
 router.post('/',checkIsAdmin,(req,res) => {
-    const {firstName,lastName,category} = req.body;
+    const {firstName,lastName,category,active} = req.body;
 
     return Student.create({
         firstName,
         lastName,
-        category
+        category,
+        active
     })
 
     .then(student => {
