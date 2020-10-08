@@ -20,6 +20,7 @@ lessonSchema.virtual('_lessonType', {
 });
 
 lessonSchema.methods.serialize = function(){
+	//console.log('==========lesson: ',this)
 	return {
 		id:this._id,
 		lessonType:this._lessonType.name,

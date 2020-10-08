@@ -8,6 +8,7 @@ const studentSchema = mongoose.Schema({
 },{minimize:false});
 
 studentSchema.methods.serialize = function(){
+    //console.log('==========student: ',this)
 	return{
 		firstName: this.firstName || '',
         lastName: this.lastName || '',

@@ -265,6 +265,7 @@ router.get('/search',async (req,res) => {
     }
     catch(err){
         console.log(err);
+        res.status(500);
         return res.json({
             code:500,
             message:'an error occured',
