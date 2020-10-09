@@ -9,6 +9,7 @@ router.use(jwtAuth);
 
 router.post('/',levelAccess(1),async (req,res) => {
     let {lessonType} = req.body;
+    conseol.log(lessonType);
     try{
         let type = await LessonType.create(lessonType);
         return res.json({
