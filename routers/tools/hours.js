@@ -37,7 +37,7 @@ function hourBreakdown(lessons){
         let students = lessons[i].students.length;
         let pay = hourMap[students] || hourMap[students] === 0 ? hourMap[students] : hourMap[12];
         hourBreakDown[pay] = hourBreakDown[pay] ? hourBreakDown[pay] + 1 : 1;
-        studentBreakDown[pay] = students;
+        studentBreakDown[students] = studentBreakDown[students] ? studentBreakDown[students] + 1: 1;
     }
 
     return [hourBreakDown,studentBreakDown];
