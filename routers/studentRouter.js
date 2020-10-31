@@ -14,7 +14,8 @@ router.post('/',checkIsAdmin,(req,res) => {
         firstName,
         lastName,
         category,
-        active
+        active,
+        notes
     })
 
     .then(student => {

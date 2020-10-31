@@ -4,7 +4,8 @@ const studentSchema = mongoose.Schema({
     firstName:{type:String,required:true},
     lastName:{type:String,required:true},
     category:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', unique: false, required: [false, 'No students found']}],
-    active:{type:Boolean,default:false}
+    active:{type:Boolean,default:false},
+    notes:{type:String,default:""}
 },{minimize:false});
 
 studentSchema.methods.serialize = function(){
@@ -15,7 +16,8 @@ studentSchema.methods.serialize = function(){
         id:this._id,
         fullName:this.fullName,
         category:this.category ? this.category.map(resp => resp.serialize()) : [],
-        active:this.active
+        active:this.active,
+        notes:this.notes
 	};
 }
 
