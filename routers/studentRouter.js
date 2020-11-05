@@ -71,6 +71,8 @@ router.put('/:id',levelAccess(1),async (req,res) => {
             message:"Student updated"
         });
     } catch (err) {
+        console.log('error updating student:',err);
+        res.status(500);
         return res.json({
             code: 500,
             message: 'an error occured',
@@ -90,6 +92,7 @@ router.delete('/:id',levelAccess(1),async (req,res) => {
             message:"Student removed"
         });
     } catch (err) {
+
         return res.json({
             code: 500,
             message: 'an error occured',
