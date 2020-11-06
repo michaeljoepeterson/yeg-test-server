@@ -59,7 +59,7 @@ router.get('/',async (req,res) => {
     }
 });
 
-router.put('/:id',levelAccess(1),async (req,res) => {
+router.put('/:id',levelAccess(2),async (req,res) => {
     const {id} = req.params; 
     const {student} = req.body;
     try {
