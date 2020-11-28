@@ -3,6 +3,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET,JWT_EXPIRY } = require('../config');
+const {checkFbAuth} = require('../tools/toolExports');
 const router = express.Router();
 //create the token
 const createAuthToken = function(user){
@@ -16,7 +17,7 @@ const createAuthToken = function(user){
 const localAuth = passport.authenticate('local',{session: false});
 router.use(bodyParser.json());
 
-router.post('/login', localAuth, (req, res) => {
+router.post('/login', checkFbAuth, localAuth, (req, res) => {
   const authToken = createAuthToken(req.user.serialize());
   res.json({authToken});
 });
