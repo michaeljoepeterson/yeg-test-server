@@ -5,24 +5,32 @@ const checkFbAuth = async(req,res,next) => {
     if(req.headers.authtoken){
         try{
             const decodedToken = await admin.auth().verifyIdToken(req.headers.authtoken);
-            let {email} = decodedToken;
+            let {email,name} = decodedToken;
             
             let user = await User.findByEmail(email);
             if(!user){
-                
-                /*
-                user = await User.create({
-
-                });
-                */
+                let userData = {email};
+                if(name){
+                    let splitName = name.split(' ');
+                    userData.firstName = splitName[0];
+                    userData.lastName = splitName[1];
+                }
+                console.log('new user: ',userData)
+                user = await User.create(userData);
+                throw {
+                    message:'new user'
+                };
             }
             else{
-                req.user = user;
+                if(user.level || user.level === 0){
+                    req.user = user;
+                }
+                else{
+                    throw {
+                        message:'new user'
+                    };
+                }
             }
-            //to do
-            //find user from decoded token
-            //set req.user to found user
-            //potentially remove serialize/local auth from router?
             next();
         }
         catch(e){

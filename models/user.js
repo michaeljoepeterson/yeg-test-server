@@ -4,12 +4,12 @@ const bcrypt = require('bcryptjs');
 //will need to modify schema for regular users
 const userSchema = mongoose.Schema({
     email:{type:String,required:true,unique:true},
-    password: {type: String, required: true, default:null},
+    password: {type: String, required: false},
     admin:{type:Boolean},
     lastAccess:{type:Date},
     lastLogin:{type:Date},
     lastLoginAttempt:{type:Date},
-    level:{type:Number, required: true,default:null},
+    level:{type:Number, required: false,default:null},
     firstName:{type:String, default:null},
     lastName:{type:String, default:null},
 });
