@@ -17,14 +17,14 @@ const createAuthToken = function(user){
 const localAuth = passport.authenticate('local',{session: false});
 router.use(bodyParser.json());
 
-router.post('/login', checkFbAuth, localAuth, (req, res) => {
-  const authToken = createAuthToken(req.user.serialize());
+router.post('/login', checkFbAuth, (req, res) => {
+  const authToken = createAuthToken(req.user);
   res.json({authToken});
 });
 
 const jwtAuth = passport.authenticate('jwt', {session:false});
 
-router.post('/refresh', jwtAuth, (req,res)=>{
+router.post('/refresh', checkFbAuth, jwtAuth, (req,res)=>{
 	const authToken = createAuthToken(req.user);
 	res.json({authToken});
 });
