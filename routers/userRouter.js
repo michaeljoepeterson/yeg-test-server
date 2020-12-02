@@ -79,9 +79,8 @@ router.post('/user',jwtAuth,checkUserLevel,(req,res) => {
 
 
 router.get('/',jwtAuth,(req,res) => {
-    const {email,password,level} = req.body;
 
-    return User.find({})
+    return User.find({level:{$ne:null}})
 
     .then(users => {
         return res.json({
