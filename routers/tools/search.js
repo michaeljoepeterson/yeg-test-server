@@ -96,7 +96,7 @@ async function queryBuilder(options){
     if(endDate){
         let start = startDate ? new Date(startDate) : new Date();
         //inclusive of start day
-        start.setDate(start.getDate() + 1);
+        //start.setDate(start.getDate() + 1);
         let end = endDate ? new Date(endDate) : new Date(start);
         query.date = {};
         query.date.$gte = end;
