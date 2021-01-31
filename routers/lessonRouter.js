@@ -158,23 +158,24 @@ router.get('/summary',(req,res) => {
     let {id,email,startDate,endDate} = req.query;
     let start = startDate ? new Date(startDate) : new Date();
     //inclusive of start day
-    start.setDate(start.getDate() + 1);
+    //start.setDate(start.getDate() + 1);
     let end = endDate ? new Date(endDate) : new Date(start);
     if(!endDate){
         const defaultRange = 30;
         end.setDate(end.getDate() - 30);
     }
     //inclusive of end day
-    end.setDate(end.getDate() - 1);
-    start.setHours(0,0,0,0);
-    end.setHours(0,0,0,0);
-    console.log(id,email,findById);
+    //end.setDate(end.getDate() - 1);
+    //start.setHours(0,0,0,0);
+    //end.setHours(0,0,0,0);
+    console.log(id,email);
     if(id){
         return findById(id,start,end)
 
         .then(lessons => {
             let lessonData = {};
             let serializedLessons = lessons.map(lesson => lesson.serialize());
+            console.log('num lessons: ',serializedLessons.length);
             lessonData.totalHours = totalHours(serializedLessons);
             lessonData.totalStudents = totalStudents(serializedLessons);
             let hourData = hourBreakdown(serializedLessons);
