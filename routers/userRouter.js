@@ -186,15 +186,20 @@ router.put('/reset',checkSecret,jwtAuth,async (req,res) => {
 
 router.post('/create',levelAccess(1), jwtAuth,async(req,res) => {
     const {user} = req.body;
-
     try{
         let foundUser = await User.findByEmail(user.username);
+        let updatedUser = {...user};
+        delete updatedUser.id;
         let req;
         if(!foundUser){
-            req = User.create({...user});
+            req = User.create({...updatedUser});
         }
         else{
-            req = User.findByIdAndUpdate(foundUser.id,{new:true});
+            delete updatedUser.email;
+            req = User.findByIdAndUpdate(foundUser.id,
+                {
+                    $set:updatedUser
+                },{new:true});
         }
 
         let newUser = await req;
