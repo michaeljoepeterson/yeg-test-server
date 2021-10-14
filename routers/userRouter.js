@@ -192,6 +192,7 @@ router.post('/create',levelAccess(1), jwtAuth,async(req,res) => {
         delete updatedUser.id;
         let req;
         if(!foundUser){
+            updatedUser.email = updatedUser.username;
             req = User.create({...updatedUser});
         }
         else{
