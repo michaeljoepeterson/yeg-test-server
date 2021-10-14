@@ -188,7 +188,7 @@ router.post('/create',levelAccess(1), jwtAuth,async(req,res) => {
     const {user} = req.body;
 
     try{
-        let foundUser = await User.findByEmail(user.email);
+        let foundUser = await User.findByEmail(user.username);
         let req;
         if(!foundUser){
             req = User.create({...user});
