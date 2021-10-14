@@ -201,7 +201,7 @@ router.post('/create',levelAccess(1), jwtAuth,async(req,res) => {
         return res.json({
             message:'User created',
             user:newUser.serialize()
-        })
+        });
     }
     catch(e){
         console.log('error ', e);
